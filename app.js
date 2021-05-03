@@ -8,8 +8,9 @@ const authRoutes = require('./routes/authRoutes');
 // Create app
 const app = express();
 
-// Set static
+// Middleware
 app.use(express.static('public'));
+app.use(express.json());
 
 // View engine
 app.set('view engine', 'ejs');
