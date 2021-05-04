@@ -18,8 +18,6 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.post('save', async (document, next) => {
-
-
     next();
 });
 
