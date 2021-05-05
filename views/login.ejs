@@ -12,13 +12,39 @@
 
 <script>
     const form = document.querySelector('form');
-    form.addEventListener('submit', (e) => {
+    const emailError = document.querySelector('.email.error');
+    const passwordError = document.querySelector('.password.error');
+
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        // Reset errors
+        emailError.textContent = '';
+        passwordError.textContent = '';
 
         const email = form.email.value;
         const password = form.password.value;
 
-        console.log(email, password)
-    })
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                body: JSON.stringify({ email, password }),
+                headers: { 'Content-Type': 'application/json' }
+            });
+            console.log(response);
+        
+            const dataFromServer = await response.json();
+            console.log(data)
+            if(dataFromServer.errors) {
+                emailError.textContent = dataFromServer.errors.email;
+                passwordError.textContent = dataFromServer.errors.password;
+            }
+            if (dataFromServer.user) {
+                // location.assign('/');
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    });
 </script>
 <%- include('partials/footer'); -%>

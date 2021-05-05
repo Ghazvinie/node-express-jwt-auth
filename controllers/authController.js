@@ -40,7 +40,7 @@ async function signup_post(request, response) {
     try {
         const user = await User.create({ email, password });
         const token = createToken(user._id);
-        response.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 })
+        response.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
         response.status(201).json({ user: user._id });
     } catch (error) {
         const errors = handleErrors(error);
@@ -48,9 +48,16 @@ async function signup_post(request, response) {
     }
 }
 
-function login_post(request, response) {
-    const { email, password } = request.body;
-    response.send('new login');
+async function login_post(request, response) {
+    const  { email, password } = request.body;
+
+    try {
+        const user = await User.login(email, password);
+        console.log(user)
+        response.status(200).json({ user: user._id });
+    } catch (error) {
+        response.status(400).json({});
+    }
 }
 
 module.exports = { signup_get, login_get, signup_post, login_post };
