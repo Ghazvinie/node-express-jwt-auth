@@ -15,15 +15,22 @@ function handleErrors(error) {
             errorsObject[properties.path] = properties.message;
         });
     }
+    if (error.message === 'incorrect email') {
+        errorsObject.email = error.message;
+    }
+    if (error.message === 'incorrect password') {
+        errorsObject.password = error.message;
+    }
+
     return errorsObject;
 }
 
 const maxAge = 3 * 24 * 60 * 60;
 
 function createToken(id) {
-    return jwt.sign( { id }, 'secret', { 
+    return jwt.sign({ id }, 'secret', {
         expiresIn: maxAge
-    } );
+    });
 }
 
 function signup_get(request, response) {
@@ -49,14 +56,16 @@ async function signup_post(request, response) {
 }
 
 async function login_post(request, response) {
-    const  { email, password } = request.body;
+    const { email, password } = request.body;
 
     try {
         const user = await User.login(email, password);
-        console.log(user)
+        const token = createToken(user._id);
+        response.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
         response.status(200).json({ user: user._id });
     } catch (error) {
-        response.status(400).json({});
+        const errors = handleErrors(error);
+        response.status(400).json({ errors });
     }
 }
 

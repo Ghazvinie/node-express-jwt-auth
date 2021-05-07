@@ -4,7 +4,7 @@
     <label for="email">Email</label>
     <input type="text" name="email" required />
     <div class="error email"></div>
-    <label for="password">Email</label>
+    <label for="password">Password</label>
     <input type="password" name="password" required />
     <div class="error password"></div>
     <button>Login</button>
@@ -31,16 +31,16 @@
                 body: JSON.stringify({ email, password }),
                 headers: { 'Content-Type': 'application/json' }
             });
-            console.log(response);
+
         
             const dataFromServer = await response.json();
-            console.log(data)
+
             if(dataFromServer.errors) {
                 emailError.textContent = dataFromServer.errors.email;
                 passwordError.textContent = dataFromServer.errors.password;
             }
             if (dataFromServer.user) {
-                // location.assign('/');
+                location.assign('/');
             }
         } catch (error) {
             console.log(error);
