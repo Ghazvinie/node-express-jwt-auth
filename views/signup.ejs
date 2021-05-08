@@ -32,13 +32,13 @@
                 body: JSON.stringify({ email, password }),
                 headers: { 'Content-Type': 'application/json' }
             });
-            const data = await response.json();
-            console.log(data);
-            if(data.errors) {
-                emailError.textContent = data.errors.email;
-                passwordError.textContent = data.errors.password;
+            const serialisedResponse = await response.json();
+
+            if(serialisedResponse.errors) {
+                emailError.textContent = serialisedResponse.errors.email;
+                passwordError.textContent = serialisedResponse.errors.password;
             }
-            if (data.user) {
+            if (serialisedResponse.user) {
                 location.assign('/');
             }
         } catch (error) {

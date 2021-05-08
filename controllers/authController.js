@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const keys = require('../config/keys');
 
 // Handle errors
 function handleErrors(error) {
@@ -28,7 +29,7 @@ function handleErrors(error) {
 const maxAge = 3 * 24 * 60 * 60;
 
 function createToken(id) {
-    return jwt.sign({ id }, 'secret', {
+    return jwt.sign({ id }, keys.jwt.secret, {
         expiresIn: maxAge
     });
 }
@@ -39,6 +40,13 @@ function signup_get(request, response) {
 
 function login_get(request, response) {
     response.render('login');
+}
+
+function logout_get (request, response) {
+    response.cookie('jwt', '', {
+        maxAge: 1
+    });
+    response.redirect('/');
 }
 
 async function signup_post(request, response) {
@@ -69,4 +77,4 @@ async function login_post(request, response) {
     }
 }
 
-module.exports = { signup_get, login_get, signup_post, login_post };
+module.exports = { signup_get, login_get, signup_post, login_post, logout_get };

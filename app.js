@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const keys = require('./config/keys');
 const cookieParser = require('cookie-parser');
-
+const { requireAuth, checkUser } = require('./middleware/authMiddleware');
 
 // Import routes
 const authRoutes = require('./routes/authRoutes');
@@ -27,7 +27,7 @@ mongoose.connect(keys.mongodb.MongoURI, { useNewUrlParser: true, useUnifiedTopol
     .catch(error => console.log(error));
 
 // Routes
+app.get('*', checkUser);
 app.get('/', (request, response) => response.render('home'));
-app.get('/smoothies', (request, response) => response.render('smoothies'));
+app.get('/smoothies', requireAuth, (request, response) => response.render('smoothies'));
 app.use(authRoutes);
-
