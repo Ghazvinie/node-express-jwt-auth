@@ -31,7 +31,7 @@ function checkUser(request, response, next){
                 response.locals.user = null;
                 next();
             } else {
-                let user = await User.findById(decodedToken.id);
+                const user = await User.findById(decodedToken.id);
                 response.locals.user = user;
                 next();
             }
