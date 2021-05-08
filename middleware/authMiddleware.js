@@ -33,7 +33,6 @@ function checkUser(request, response, next){
             } else {
                 let user = await User.findById(decodedToken.id);
                 response.locals.user = user;
-
                 next();
             }
         });
